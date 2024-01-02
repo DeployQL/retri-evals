@@ -1,4 +1,4 @@
-from python.sdk.indexes.indexing import Index, SearchResponse
+from pyreps.indexes.indexing import Index, SearchResponse
 from typing import Any, get_type_hints, Generic, TypeVar, Type, Dict, Optional, List, get_origin
 from pydantic import BaseModel
 import builtins
@@ -9,6 +9,13 @@ import typing
 T = TypeVar('T')
 
 DEFAULT_LIMIT = 100
+
+class TantivyDocument(BaseModel):
+    id: str
+    doc_id: str
+    embedding: List[float]
+    text: str
+
 
 class TantivyIndex(Index, Generic[T]):
     def __init__(self, schema, path: Optional[str]):
@@ -30,7 +37,7 @@ class TantivyIndex(Index, Generic[T]):
             ))
         writer.commit()
 
-    def search(self, q: str, limit: Optional[int]=0, fields:Optional[List[str]]=None):
+    def search(self, q: str, limit: Optional[int]=0, fields:Optional[List[str]]=None) -> List[SearchResponse]:
         self.index.reload()
         searcher = self.index.searcher()
 

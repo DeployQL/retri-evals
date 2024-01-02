@@ -1,19 +1,14 @@
-from typing import Dict, Set, List, Callable
-import torch
-from mteb import AbsTaskRetrieval, MSMARCOv2 as mtebMSMARCOv2
-from python.sdk.evaluation.retriever import DenseRetriever
-from python.sdk.indexes.indexing import Index
-from python.sdk.processing.pipeline import ProcessingPipeline
-from mteb.evaluation.evaluators import RetrievalEvaluator
-from mteb.evaluation.evaluators.utils import cos_sim, dot_score
+from mteb import AbsTaskRetrieval, MSMARCOv2 as mtebMSMARCOv2, CQADupstackEnglishRetrieval as mtebCQA
+from reps.evaluation.retriever import DenseRetriever
 import logging
 from time import time
 from mteb.abstasks import DRESModel
-import inspect
-from tqdm import trange
-import numpy as np
 
 logger = logging.getLogger(__name__)
+
+INDEX_KEY = "indexer"
+DOC_PROCESSING_KEY = "doc_processor"
+QUERY_PROCESSING_KEY = "query_processor"
 
 class IndexedTask:
 
@@ -37,13 +32,6 @@ class IndexedTask:
         corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
         model = model if self.is_dres_compatible(model) else DRESModel(model)
 
-        indexer = kwargs.get("indexer", None)
-        processor = kwargs.get("processor", None)
-        if not indexer or not processor:
-            raise AttributeError("indexer and processor must be passed.")
-
-        model = DenseRetriever(indexer, processor)
-
         retriever = EvaluateRetrieval(model, score_function=score_function)  # or "cos_sim" or "dot"
         start_time = time()
         results = retriever.retrieve(corpus, queries)
@@ -65,5 +53,9 @@ class IndexedTask:
 
 
 class MSMARCOv2(IndexedTask, mtebMSMARCOv2):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+class CQADupstackEnglishetrieval(IndexedTask, mtebCQA):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

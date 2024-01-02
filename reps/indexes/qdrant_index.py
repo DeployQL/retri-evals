@@ -1,4 +1,4 @@
-from python.sdk.indexes.indexing import Index, SearchResponse
+from reps.indexes.indexing import Index, SearchResponse
 from typing import Any, get_type_hints, Generic, TypeVar, Optional, List, Mapping
 from pydantic import BaseModel
 import builtins
@@ -10,6 +10,7 @@ T = TypeVar("T")
 
 class QdrantDocument(BaseModel):
     id: str
+    doc_id: str
     embedding: List[float]
     text: str
 
@@ -17,7 +18,7 @@ class QdrantIndex(Index):
     def __init__(
             self,
             name: str,
-            path: Optional[str],
+            path: Optional[str]=None,
             embedding_key: str = "embedding",
             id_key: str = "id",
             vector_config = Mapping[str, VectorParams] | VectorParams,
@@ -36,10 +37,12 @@ class QdrantIndex(Index):
         if isinstance(item, list):
             points = []
             for x in item:
+                doc_dict = dict(x)
+
                 points.append(PointStruct(
                     id=x.id,
-                    vector=dict(x).pop(self.embedding_key),
-                    payload=x,
+                    vector=doc_dict.pop(self.embedding_key),
+                    payload=doc_dict,
                 ))
             self.index.upsert(
                 collection_name=self.name,
@@ -47,35 +50,44 @@ class QdrantIndex(Index):
                 points=points,
             )
         else:
+            doc_dict = dict(item)
             self.index.upsert(
                 collection_name=self.name,
                 wait=True,
                 points=[
                     PointStruct(
                         id=item.id,
-                        vector=dict(item).pop(self.embedding_key),
-                        payload=item,
+                        vector=doc_dict.pop(self.embedding_key),
+                        payload=doc_dict,
                     )
                 ],
             )
 
     def search(self, query: Optional[str]=None, vector:Optional[List[float]] = None, limit: Optional[int]=0, fields:Optional[List[str]]=None) -> List[SearchResponse]:
-        if not query and not vector:
+        if not query and vector is None:
             raise ValueError("query or vector must be provided.")
 
-        if query and vector:
+        if query and vector is not None:
             raise ValueError("must provide either query or vector, not both.")
 
-        if vector:
+        if vector is not None:
             return self.index.search(
                 collection_name=self.name,
                 query_vector=vector,
+                limit=limit,
             )
 
-        return self.index.query(
+        results =  self.index.query(
             collection_name=self.name,
             query_text=query,
+            limit=limit,
         )
+        return [
+            SearchResponse({'id': r.id,
+             'doc_id': r.payload['doc_id'],
+             **r,
+             }) for r in results
+        ]
 
     def count(self) -> int:
         return 0

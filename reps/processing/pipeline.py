@@ -1,10 +1,13 @@
 from abc import ABC, abstractmethod
 from typing import List, TypeVar, Generic
-
+import hruid
 import torch
+import ctypes
 
 Input = TypeVar("Input")
 Output = TypeVar("Output")
+
+generator = hruid.Generator()
 
 
 class EmbeddedOutput:
@@ -16,8 +19,8 @@ class EmbeddedOutput:
 
 class ProcessingPipeline(ABC, Generic[Input, Output]):
     def __init__(self, name: str='', version:str=''):
-        self.name = name
-        self.version = version
+        self.name = name if name else generator.random()
+        self.version = version if version else 'v0.0'
 
     @property
     def id(self) -> str:
@@ -25,10 +28,10 @@ class ProcessingPipeline(ABC, Generic[Input, Output]):
         Creates a unique id for this pipeline.
         :return:
         """
-        return hash(self.name+self.version)
+        return ctypes.c_size_t(hash(self.name+self.version)).value
 
     @abstractmethod
-    def process(self, batch: List[Input], **kwargs) -> List[Output]:
+    def process(self, batch: List[Input], batch_size: int=0, **kwargs) -> List[Output]:
         """
 
         :param batch: a list of strings. Strings could be urls, file paths, or raw text.

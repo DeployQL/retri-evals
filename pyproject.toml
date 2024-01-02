@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reps"
+dynamic = ["version"]
+description = "Open-source tool for building and evaluating retrieval pipelines."
+readme = "README.md"
+requires-python = ">=3.8,<3.12"
+license = { text = "AGPL-3.0" }
+keywords = [
+    "data-science",
+    "artificial-intelligence",
+    "developers-tools",
+    "mlops",
+    "rag",
+    "retrieval",
+]
+authors = [
+    {name = "DeployQL", email = "contact@deployql.com"},
+]

@@ -1,10 +1,9 @@
 import unittest
 from typing import List
 
-import tantivy
-from python.sdk.indexes.tantivy_index import TantivyIndex
+from reps.indexes.tantivy_index import TantivyIndex
 
-from python.sdk.indexes.tantivy_index import get_tantivy_index, get_fields_annotations
+from reps.indexes.tantivy_index import get_tantivy_index, get_fields_annotations
 from pydantic import BaseModel
 
 class TestSchema(BaseModel):

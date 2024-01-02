@@ -1,6 +1,10 @@
-Retrieval Evaluation Pipelines
----
-RAG evaluation framework for faster iteration
+# Retrieval Evaluation Pipelines
+### RAG evaluation framework for faster iteration
+
+# Benefits of REPS
+- Lightweight interfaces with minimal assumptions.
+- Evaluate against standard academic datasets.
+- Bring your own database and processing pipelines.
 
 # Problem Statement
 Retrieval Augmented Generation (RAG) relies heavily on retrieval mechanisms
@@ -44,7 +48,7 @@ to be incurred later on.
 
 # Using REPS
 REPS enables faster iteration cycles to evaluate retrieval and ranking pipelines. We do this
-through integration with MTEB and BEIR datasets. 
+through integration with MTEB and BEIR datasets (so far).
 
 Further, REPS helps you build custom datasets for retrieval and ranking through LLM generated
 questions and scoring. This isn't a replacement for human labeling, but can be very close.
@@ -52,31 +56,19 @@ questions and scoring. This isn't a replacement for human labeling, but can be v
 We believe that moving retrieval pipelines to production is a critical component of this
 iteration cycle, and REPS helps make this process simpler and less error prone.
 
-# Benefits of REPS
-- Lightweight interfaces with minimal assumptions.
-- Enables faster evaluations with pre-built indexes if none of the index parameters are changing.
-- Exposes both document and query processing pipelines.
-- Built on top of standard LLM evaluation metrics.
 
-## REPS and LlamaIndex
-REPS isn't a replacement for LlamaIndex, although we have some overlap.
-
-Both packages provide a Pipeline class to transform a raw document into an embedding. 
-REPS is flexible enough that this could wrap LlamaIndex's Pipeline if you wanted. 
-
-One of the ways that REPS is looking to differentiate itself is through support in moving
-to production. One of the expectations of REPS' Pipeline is that teams will inherit and version these pipelines.
-As such, REPS will continue to add support for making it easier to track how these
-pipelines perform and are used across evaluation and production use cases.
+## REPS and the RAG ecosystem
+We want REPS to integrate easily with your existing tools. 
 
 ## REPS and MTEB
-One of the assumptions of MTEB is that it only performs an exhaustive, exact search across all documents.
-This is ok for academic purposes where we may not want to evaluate the loss
-from an approximate nearest neighbor algorithm, but this could be a concern in a real world scenario where
-we want to understand latency and storage tradeoffs. MTEB doesn't provide a way to evaluate this.
+We love MTEB and thank their maintainers for their work. As this repo finds it's footing,
+we want to upstream work that makes sense to be in MTEB.
 
-REPS integrates into MTEB by replacing some of the MTEB base task classes to remove this assumption.
-This also allows better index management, where we can skip indexing and potentially reuse a prebuilt index.
+We see the future of REPS as moving toward:
+- evaluations of tasks on top of retrieval
+- debugging and introspection of retrieval pipelines
+- incorporation of LLM task evaluation
+
 
 # Roadmap
 - [ ] Support all MTEB datasets

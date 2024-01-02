@@ -1,9 +1,7 @@
 import unittest
 import uuid
-from typing import List
 
-from python.sdk.indexes.qdrant_index import QdrantIndex, QdrantDocument
-from pydantic import BaseModel, ConfigDict
+from reps.indexes.qdrant_index import QdrantIndex, QdrantDocument
 
 
 
