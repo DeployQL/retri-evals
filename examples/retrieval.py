@@ -3,7 +3,7 @@
 import uuid
 from typing import List
 
-from reps.evaluation.mteb import CQADupstackEnglishetrieval
+from reps.evaluation.mteb_tasks import CQADupstackEnglishRetrieval
 from reps.evaluation.retriever import DenseRetriever
 from reps.indexes.qdrant_index import QdrantIndex, QdrantDocument
 from reps.indexes.indexing import MTEBDocument
@@ -68,7 +68,7 @@ if __name__ == "__main__":
 
     id = f"{doc_processor.id}-{query_processor.id}"
     print(f"evaluation id: {id}")
-    eval = MTEB(tasks=[CQADupstackEnglishetrieval()])
+    eval = MTEB(tasks=[CQADupstackEnglishRetrieval()])
     results = eval.run(retriever, verbosity=2, overwrite_results=True, output_folder=f"results/{id}")
 
     print(results)

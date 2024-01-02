@@ -1,34 +1,15 @@
-# Retrieval Evaluation Pipelines
+# Retrieval Evaluation Pipelines <sup>alpha</sup>
 ### RAG evaluation framework for faster iteration
 
-# Benefits of REPS
-- Lightweight interfaces with minimal assumptions.
-- Evaluate against standard academic datasets.
-- Bring your own database and processing pipelines.
+REPS contains abstractions that we've found helpful for benchmarking different retrieval pipelines.
 
-# Problem Statement
-Retrieval Augmented Generation (RAG) relies heavily on retrieval mechanisms
-to reduce the chance of hallucination. Within RAG, we've seen many combinations
-of ways to build these pipelines. However, performance of RAG depends a lot on the dataset
-and the use case, and many blog posts cover evaluation of the same set of parameters -- chunking,
-embedding models, and retrieval algorithms. 
+Built on MTEB, REPS helps bridge the gap between benchmarking and production.
 
-As vector indexes grow, it's harder to return precise results.
-Top results may include near-duplicate documents or irrelevant information. When
-this data is included into the context of an LLM, the LLM gets confused and generates 
-a worse response.
+## Why REPS
+RAG has been a huge focus lately for Gen AI, and MTEB provides open source, academic datasets
+for evaluating retrieval. This can be a great way to quickly evaluate retrieval without labeling your own dataset.
 
-Users of that LLM app need to spend more time writing responding and talking to the LLM
-without having a lot of context as to how to improve the systems responses.
-
-For LLM app providers, this increases the cost of operations as users send more data to the LLM.
-
-## Developer Pain Points with Retrieval
-A lot of development is dependent on evaluating a black box. Retrieval has more well-known
-ways to evaluate, but generating an internal dataset can be costly and time consuming. 
-
-Below, we list a few of the different areas where changes can play a large role in improving 
-how well RAG performs.
+REPS helps you benchmark different parts of retrieval against your dataset:
 1. Text cleaning
 2. Chunking
 3. Embedding Model
@@ -37,28 +18,14 @@ how well RAG performs.
 5. Reranking algorithm
 6. Number of results to return
 
-Many developers are already evaluating how chunking, processing, and different embeddings
-change performance, but this information isn't widely shared or recorded. This may be because
-the outcome is so dependent on the data and the use case.
+### Extending beyond relevancy
+Relevancy was only one part of our benchmarking.
+We wanted to know what latency to expect and whether our database will scale. REPS
+aims to add additional functionality to benchmark latency, cost, and database updates.
 
-Some popular database solutions are not great at indexing or reindexing a lot of data. 
-Elasticsearch has its own set of parameters that drastically change indexing performance. Therefore, the more
-we can tune our indexing pipeline towards its optimal setting, the less toil and cost that needs
-to be incurred later on.
-
-# Using REPS
-REPS enables faster iteration cycles to evaluate retrieval and ranking pipelines. We do this
-through integration with MTEB and BEIR datasets (so far).
-
-Further, REPS helps you build custom datasets for retrieval and ranking through LLM generated
-questions and scoring. This isn't a replacement for human labeling, but can be very close.
-
-We believe that moving retrieval pipelines to production is a critical component of this
-iteration cycle, and REPS helps make this process simpler and less error prone.
-
-
-## REPS and the RAG ecosystem
-We want REPS to integrate easily with your existing tools. 
+REPS helps you benchmark faster. You can reuse a populated index while iterating on
+query processing and reranking. How data is processed is left up to you, and REPS integrates
+it into evaluation.
 
 ## REPS and MTEB
 We love MTEB and thank their maintainers for their work. As this repo finds it's footing,
@@ -67,49 +34,73 @@ we want to upstream work that makes sense to be in MTEB.
 We see the future of REPS as moving toward:
 - evaluations of tasks on top of retrieval
 - debugging and introspection of retrieval pipelines
-- incorporation of LLM task evaluation
+- Facilitating internal dataset creation.
 
 
 # Roadmap
-- [ ] Support all MTEB datasets
-- [ ] Pipeline Versioning
-- [ ] Index tracking and automatic index reuse
-- [ ] Support for automatic dataset generation
-- [ ] Support for evaluation over time
+REPS is still in beta. We're planning to add the following functionality:
 
-# Differentiators
-1. Lightweight Pipeline Interfaces
-2. Versioning and tracking pipelines
-3. Automatic Dataset generation.
+- [ ] Support for automatic dataset generation
+- [ ] Support parallel execution
+- [ ] Add support for hybrid retrieval baselines
+- [ ] Add support for latency and cost benchmarks
 
 # Usage
 REPS exposes four fundamental interfaces for you to build upon.
 1. Index
 2. Query Processor
 3. Document Processor
-4. Pipeline
+4. Retriever
+
+
+REPS tries to be unopinionated about your processing requirements. The below
+code snippet shows how to define your own processors while leveraging REPS' DenseRetriever
+and MTEB tasks that we've extended.
+
+We expect that Processors will be named and versioned, and REPS outputs
+results based on these processors.
 
 ```python
-    model = FlagModel("BAAI/bge-small-en-v1.5",
-                      query_instruction_for_retrieval="Represent this sentence for searching relevant passages: ",
-                      use_fp16=True)
-    index = QdrantIndex("msmarco", size=5)
-    processing = DocumentProcessor()
-    eval = MTEB(tasks=[MSMARCOv2()])
-    results = eval.run(model, verbosity=2, indexer=index, processor=processing)
+from reps.evaluation.mteb_tasks import CQADupstackEnglishRetrieval
+from reps.evaluation.retriever import DenseRetriever
+from reps.indexes.qdrant_index import QdrantIndex, QdrantDocument
+from reps.indexes.indexing import MTEBDocument
+from reps.processing.pipeline import ProcessingPipeline, Input, Output
+from FlagEmbedding import FlagModel
+from qdrant_client.models import VectorParams, Distance
+from mteb import MTEB
+
+model_name ="BAAI/bge-small-en-v1.5"
+model = FlagModel(model_name,
+                  query_instruction_for_retrieval="Represent this sentence for searching relevant passages: ",
+                  use_fp16=True)
+
+index = QdrantIndex("CQADupstackEnglish", vector_config=VectorParams(size=384, distance=Distance.COSINE))
+doc_processor = DocumentProcessor(model, name=model_name)
+query_processor = QueryProcessor(model, name=model_name)
+
+retriever = DenseRetriever(
+    index=index,
+    query_processor=query_processor,
+    doc_processor=doc_processor,
+)
+
+eval = MTEB(tasks=[CQADupstackEnglishRetrieval()])
+results = eval.run(retriever, verbosity=2, overwrite_results=True, output_folder=f"results/{id}")
 ```
 
 # What dataset to evaluate on
 Building your own internal evaluation dataset is going to be the highest signal while
 also being the most time consuming.
 
-REPS is integrated into MTEB and BEIR, enabling evaluation against multiple types of tasks.
+REPS is currently integrated into MTEB for retrieval tasks only, but we're working on more.
 
-Below is a list of the open source evaluation datasets that can be evaluated against. 
-
-{{ MTEB dataset listing }}
+[MTEB's available tasks](https://github.com/embeddings-benchmark/mteb/tree/main?tab=readme-ov-file#available-tasks)
 
 
 # Have questions?
 Reach out! Our team has experience working on petabyte-scale search and analytics applications.
 We'd love to hear what you're working on.
+---
+## Notable Repositories
+[MTEB](https://github.com/embeddings-benchmark/mteb)

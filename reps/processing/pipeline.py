@@ -18,6 +18,11 @@ class EmbeddedOutput:
     embedding: torch.Tensor
 
 class ProcessingPipeline(ABC, Generic[Input, Output]):
+    """
+    ProcessingPipelines are a high level abstraction for translating an input to an output.
+
+    This abstraction is used to encapsulate the id behavior of the pipelines.
+    """
     def __init__(self, name: str='', version:str=''):
         self.name = name if name else generator.random()
         self.version = version if version else 'v0.0'
@@ -25,10 +30,10 @@ class ProcessingPipeline(ABC, Generic[Input, Output]):
     @property
     def id(self) -> str:
         """
-        Creates a unique id for this pipeline.
+        Creates a unique id for this pipeline. This id will be a positive integer that we convert to a string.
         :return:
         """
-        return ctypes.c_size_t(hash(self.name+self.version)).value
+        return str(ctypes.c_size_t(hash(self.name+self.version)).value)
 
     @abstractmethod
     def process(self, batch: List[Input], batch_size: int=0, **kwargs) -> List[Output]:

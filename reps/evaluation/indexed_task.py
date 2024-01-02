@@ -1,5 +1,3 @@
-from mteb import AbsTaskRetrieval, MSMARCOv2 as mtebMSMARCOv2, CQADupstackEnglishRetrieval as mtebCQA
-from reps.evaluation.retriever import DenseRetriever
 import logging
 from time import time
 from mteb.abstasks import DRESModel
@@ -50,12 +48,3 @@ class IndexedTask:
         }
 
         return scores
-
-
-class MSMARCOv2(IndexedTask, mtebMSMARCOv2):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-class CQADupstackEnglishetrieval(IndexedTask, mtebCQA):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
