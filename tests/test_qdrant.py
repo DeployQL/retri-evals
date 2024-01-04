@@ -1,7 +1,7 @@
 import unittest
 import uuid
 
-from reps.indexes.qdrant_index import QdrantIndex, QdrantDocument
+from retri_eval.indexes.qdrant_index import QdrantIndex, QdrantDocument
 
 
 

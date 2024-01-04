@@ -36,7 +36,7 @@ class IndexedTask:
 
         retriever = EvaluateRetrieval(model, score_function=score_function)  # or "cos_sim" or "dot"
         start_time = time()
-        results = retriever.retrieve(corpus, queries)
+        results, metrics = retriever.retrieve(corpus, queries)
         end_time = time()
         logger.info("Time taken to retrieve: {:.2f} seconds".format(end_time - start_time))
 
@@ -49,6 +49,11 @@ class IndexedTask:
             **{f"recall_at_{k.split('@')[1]}": v for (k, v) in recall.items()},
             **{f"precision_at_{k.split('@')[1]}": v for (k, v) in precision.items()},
             **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
+            **{
+                'retrieval_latency_at_50': np.percentile(metrics.latencies, 50),
+                'retrieval_latency_at_95': np.percentile(metrics.latencies, 95),
+                'retrieval_latency_at_99': np.percentile(metrics.latencies, 99),
+            }
         }
 
         return scores

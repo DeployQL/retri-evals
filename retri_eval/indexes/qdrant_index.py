@@ -1,4 +1,4 @@
-from reps.indexes.indexing import Index, SearchResponse
+from retri_eval.indexes.indexing import Index, SearchResponse
 from typing import Any, get_type_hints, Generic, TypeVar, Optional, List, Mapping
 from pydantic import BaseModel
 from qdrant_client import QdrantClient
@@ -73,5 +73,5 @@ class QdrantIndex(Index[QdrantDocument]):
         return [SearchResponse(id=r.id, doc_id=r.payload['doc_id'], score=r.score) for r in results]
 
     def count(self) -> int:
-        return self.index.count(self.name)
+        return self.index.count(self.name).count
 

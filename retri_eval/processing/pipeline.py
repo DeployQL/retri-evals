@@ -6,7 +6,7 @@ import torch
 Input = TypeVar("Input")
 Output = TypeVar("Output")
 
-generator = hruid.Generator()
+generator = hruid.Generator(use_number=False, use_adjective=False, use_noun=True, use_verb=False, use_adverb=False)
 
 
 class EmbeddedOutput:
@@ -32,7 +32,7 @@ class ProcessingPipeline(ABC, Generic[Input, Output]):
         Creates a unique id for this pipeline. This id will be a positive integer that we convert to a string.
         :return:
         """
-        return f"{self.name}-{self.version}"
+        return f"{self.name}:{self.version}"
 
     @abstractmethod
     def process(self, batch: List[Input], batch_size: int=0, **kwargs) -> List[Output]:

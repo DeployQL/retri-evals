@@ -1,3 +1,6 @@
+# the results folder for default mteb settings
+results/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

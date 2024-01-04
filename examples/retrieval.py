@@ -3,11 +3,11 @@
 import uuid
 from typing import List, Dict
 import json
-from reps.evaluation.mteb_tasks import CQADupstackEnglishRetrieval, Touche2020
-from reps.evaluation.retriever import DenseRetriever
-from reps.indexes.qdrant_index import QdrantIndex, QdrantDocument
-from reps.indexes.indexing import MTEBDocument
-from reps.processing.pipeline import ProcessingPipeline, Input, Output
+from retri_eval.evaluation.mteb_tasks import CQADupstackEnglishRetrieval, Touche2020
+from retri_eval.evaluation.retriever import DenseRetriever
+from retri_eval.indexes.qdrant_index import QdrantIndex, QdrantDocument
+from retri_eval.indexes.indexing import MTEBDocument
+from retri_eval.processing.pipeline import ProcessingPipeline, Input, Output
 from FlagEmbedding import FlagModel
 from qdrant_client.models import VectorParams, Distance
 from mteb import MTEB
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     model_name ="BAAI/bge-small-en-v1.5"
     model = FlagModel(model_name,
                       query_instruction_for_retrieval="Represent this sentence for searching relevant passages: ",
-                      use_fp16=False)
+                      use_fp16=True)
 
     index = QdrantIndex("Touche", vector_config=VectorParams(size=384, distance=Distance.COSINE))
     doc_processor = DocumentProcessor(model, name=model_name)

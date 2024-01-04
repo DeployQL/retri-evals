@@ -47,7 +47,7 @@ from mteb import (
     SciFactPL as MTEBSciFactPL,
     TRECCOVIDPL as MTEBTRECCOVIDPL,
 )
-from reps.evaluation.indexed_task import IndexedTask
+from retri_eval.evaluation.indexed_task import IndexedTask
 
 class ArguAna(IndexedTask,MTEBArguAna):
     def __init__(self, **kwargs):

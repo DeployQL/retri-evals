@@ -5,16 +5,16 @@ Retrievers conform to the expected Model interface, so they can be passed to MTE
 provide a search() method that we use in our task to run the evaluation.
 """
 from beir.retrieval.search import BaseSearch
-from typing import Dict, List, Tuple
-from reps.indexes.indexing import Index, SearchResponse
-from reps.processing.pipeline import ProcessingPipeline, Output
+from typing import Dict, List, Tuple, NamedTuple
+from retri_eval.indexes.indexing import Index, SearchResponse
+from retri_eval.processing.pipeline import ProcessingPipeline, Output
 import logging
 from beir.retrieval.search.dense.util import cos_sim, dot_score
 import time
 
 logger = logging.getLogger(__name__)
 
-class RetrieverMetrics:
+class RetrieverMetrics(NamedTuple):
     latencies: List[float]
 
 class DenseRetriever(BaseSearch):
@@ -87,6 +87,8 @@ class DenseRetriever(BaseSearch):
 
                 embeddings = self.encode_corpus(corpus_list[corpus_start_idx:corpus_end_idx], batch_size=0)
                 self.index.add(embeddings)
+        else:
+            logger.info("Skipping indexing. Given Index is not empty.")
 
         latencies = []
         for query_itr in range(len(query_embeddings)):

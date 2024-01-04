@@ -3,7 +3,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "reps"
+name = "retri_eval"
 version = "0.0.1"
 
 description = "Open-source tool for building and evaluating retrieval pipelines."

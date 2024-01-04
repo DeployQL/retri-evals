@@ -2,14 +2,14 @@
 ### RAG evaluation framework for faster iteration
 
 
-## About REPS
+## About retri-eval
 Evaluating all of the components of a RAG pipeline is challenging. We didn't find a
 great existing solution that was
 1. flexible enough to fit on top of our document and query processing.
 2. gave us confidence in scaling the database up without increasing latency or costs.
 3. encouraged reuse of components.
 
-REPS aims to be unopinionated enough that you can reuse any existing pipelines you have.
+retri-eval aims to be unopinionated enough that you can reuse any existing pipelines you have.
 
 ## Built With
 - MTEB
@@ -19,12 +19,12 @@ REPS aims to be unopinionated enough that you can reuse any existing pipelines y
 ## Getting Started
 ### Installation
 ```bash
-pip install reps
+pip install retri-eval
 ```
 ### Define your data type
 We use Pydantic to make sure that the index receives the expected data.
 
-To use MTEB and BEIR datasets, REPS expects your data to provide a `doc_id` field.
+To use MTEB and BEIR datasets, retri-eval expects your data to provide a `doc_id` field.
 This is set inside of our retriever and is how BEIR evaluates your results.
 
 Below, we create a `QdrantDocument` that specifically indexes text alongside the embedding.
@@ -81,23 +81,23 @@ class QueryProcessor(ProcessingPipeline[str, List[float]]):
 
 ### Define a Retriever
 The Retriever class acts as our interface to processing. It defines our search behavior
-over the index. REPS defines a DenseRetriever for MTEB.
+over the index. retri-eval defines a DenseRetriever for MTEB.
 
 ```python
 model_name ="BAAI/bge-small-en-v1.5"
-    model = FlagModel(model_name,
-                      query_instruction_for_retrieval="Represent this sentence for searching relevant passages: ",
-                      use_fp16=True)
+model = FlagModel(model_name,
+                  query_instruction_for_retrieval="Represent this sentence for searching relevant passages: ",
+                  use_fp16=True)
 
-    index = QdrantIndex("CQADupstackEnglish", vector_config=VectorParams(size=384, distance=Distance.COSINE))
-    doc_processor = DocumentProcessor(model, name=model_name)
-    query_processor = QueryProcessor(model, name=model_name)
+index = QdrantIndex("CQADupstackEnglish", vector_config=VectorParams(size=384, distance=Distance.COSINE))
+doc_processor = DocumentProcessor(model, name=model_name)
+query_processor = QueryProcessor(model, name=model_name)
 
-    retriever = DenseRetriever(
-        index=index,
-        query_processor=query_processor,
-        doc_processor=doc_processor,
-    )
+retriever = DenseRetriever(
+    index=index,
+    query_processor=query_processor,
+    doc_processor=doc_processor,
+)
 ```
 
 ### Use our MTEB Tasks
@@ -107,7 +107,7 @@ and extended MTEB tasks to use it.
 This lets us bring our own indexes and define custom searching behavior. We're hoping to upstream this in the future.
 
 ````python
-from reps.evaluation.mteb_tasks import CQADupstackEnglishRetrieval
+from retri-eval.evaluation.mteb_tasks import CQADupstackEnglishRetrieval
 
 eval = MTEB(tasks=[CQADupstackEnglishRetrieval()])
 results = eval.run(retriever, verbosity=2, overwrite_results=True, output_folder=f"results/{id}")
@@ -162,70 +162,50 @@ results:
 ```
 
 ## Roadmap
-REPS is still in active development. We're planning to add the following functionality:
+retri-eval is still in active development. We're planning to add the following functionality:
 
 - [ ] Support reranking models
 - [ ] Add support for hybrid retrieval baselines
 - [ ] Support for automatic dataset generation
 - [ ] Support parallel execution
-- [ ] Add support for cost benchmarks
-
-# Usage
-REPS exposes four fundamental interfaces for you to build upon.
-1. Index
-2. Query Processor
-3. Document Processor
-4. Retriever
-
-
-REPS tries to be unopinionated about your processing requirements. The below
-code snippet shows how to define your own processors while leveraging REPS' DenseRetriever
-and MTEB tasks that we've extended.
-
-We expect that Processors will be named and versioned, and REPS outputs
-results based on these processors.
-
-```python
-from reps.evaluation.mteb_tasks import CQADupstackEnglishRetrieval
-from reps.evaluation.retriever import DenseRetriever
-from reps.indexes.qdrant_index import QdrantIndex, QdrantDocument
-from reps.indexes.indexing import MTEBDocument
-from reps.processing.pipeline import ProcessingPipeline, Input, Output
-from FlagEmbedding import FlagModel
-from qdrant_client.models import VectorParams, Distance
-from mteb import MTEB
-
-model_name ="BAAI/bge-small-en-v1.5"
-model = FlagModel(model_name,
-                  query_instruction_for_retrieval="Represent this sentence for searching relevant passages: ",
-                  use_fp16=True)
-
-index = QdrantIndex("CQADupstackEnglish", vector_config=VectorParams(size=384, distance=Distance.COSINE))
-doc_processor = DocumentProcessor(model, name=model_name)
-query_processor = QueryProcessor(model, name=model_name)
-
-retriever = DenseRetriever(
-    index=index,
-    query_processor=query_processor,
-    doc_processor=doc_processor,
-)
-
-eval = MTEB(tasks=[CQADupstackEnglishRetrieval()])
-results = eval.run(retriever, verbosity=2, overwrite_results=True, output_folder=f"results/{id}")
-```
+- [ ] Add support for latency and cost benchmarks
 
 # What dataset to evaluate on
 Building your own internal evaluation dataset is going to be the highest signal while
-also being the most time consuming.
+also being the most time consuming. Relying on multiple MTEB datasets
+can tell you how your solution works generally.
 
-REPS is currently integrated into MTEB for retrieval tasks only, but we're working on more.
+retri-eval is currently integrated into MTEB for retrieval tasks only, but we're working on more.
 
 [MTEB's available tasks](https://github.com/embeddings-benchmark/mteb/tree/main?tab=readme-ov-file#available-tasks)
 
 
-# Have questions?
+# Let's Chat!
 Reach out! Our team has experience working on petabyte-scale search and analytics applications.
-We'd love to hear what you're working on.
----
-## Notable Repositories
-[MTEB](https://github.com/embeddings-benchmark/mteb)
+We'd love to hear what you're working on and see how we can help.
+
+Matt - matt _[at]_ deployql.com
+
+Feel free to schedule some time to chat, too.
+
+<!-- Google Calendar Appointment Scheduling begin -->
+<link href="https://calendar.google.com/calendar/scheduling-button-script.css" rel="stylesheet">
+<script src="https://calendar.google.com/calendar/scheduling-button-script.js" async>
+</script>
+<script>
+(function() {
+  var target = document.currentScript;
+  window.addEventListener('load', function() {
+    calendar.schedulingButton.load({
+      url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ0JWQN_h7eFEwVE6DL8E8lMBQPn2k6YAmnZJ9QhGlD-Dn__lxUDZa4zq4zjuZoRNJE8kjhCAhA5?gv=true',
+      color: '#039BE5',
+      label: 'Book an appointment',
+      target,
+    });
+  });
+})();
+</script>
+<!-- end Google Calendar Appointment Scheduling -->
+
+## Acknowledgements
+- [MTEB](https://github.com/embeddings-benchmark/mteb)
