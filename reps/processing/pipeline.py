@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from typing import List, TypeVar, Generic
 import hruid
 import torch
-import ctypes
 
 Input = TypeVar("Input")
 Output = TypeVar("Output")
@@ -33,7 +32,7 @@ class ProcessingPipeline(ABC, Generic[Input, Output]):
         Creates a unique id for this pipeline. This id will be a positive integer that we convert to a string.
         :return:
         """
-        return str(ctypes.c_size_t(hash(self.name+self.version)).value)
+        return f"{self.name}-{self.version}"
 
     @abstractmethod
     def process(self, batch: List[Input], batch_size: int=0, **kwargs) -> List[Output]:

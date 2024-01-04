@@ -16,7 +16,7 @@ class MTEBDocument(BaseModel):
     text: str
     title: str
 
-class SearchResponse(TypedDict):
+class SearchResponse(BaseModel):
     """
     SearchResponse returns data. It doesn't make any assumptions of the payload
     returned, it only requires that we have an id and a score.
@@ -26,13 +26,18 @@ class SearchResponse(TypedDict):
     score: float
 
 class Index(ABC, Generic[T]):
+    """
+    Indexes enable storing data. The generic interface doesn't know what type of data, only that we are able to
+    add it.
 
+    It seems likely that the search response object will also need to be generic in the future.
+    """
     @abstractmethod
     def add(self, item: List[T] | T):
         pass
 
     @abstractmethod
-    def search(self, query: List[float], limit: Optional[int]=0, fields:Optional[List[str]]=None) -> List[SearchResponse]:
+    def search(self, vector: List[float], limit: Optional[int]=0, fields:Optional[List[str]]=None) -> List[SearchResponse]:
         pass
 
     @abstractmethod

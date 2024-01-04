@@ -1,14 +1,14 @@
 [build-system]
-requires = ["setuptools>=61.0.0"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
 
-[project]
+[tool.poetry]
 name = "reps"
-dynamic = ["version"]
+version = "0.0.1"
+
 description = "Open-source tool for building and evaluating retrieval pipelines."
 readme = "README.md"
-requires-python = ">=3.8,<3.12"
-license = { text = "AGPL-3.0" }
+license = "AGPL-3.0"
 keywords = [
     "data-science",
     "artificial-intelligence",
@@ -17,6 +17,20 @@ keywords = [
     "rag",
     "retrieval",
 ]
-authors = [
-    {name = "DeployQL", email = "contact@deployql.com"},
-]
+authors = [ "DeployQL <contact@deployql.com" ]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.12"
+pydantic-settings = "2.1.0"
+tantivy = "0.21.0"
+qdrant-client = "1.7.0"
+tokenizers = "0.14.1"
+beir = "2.0.0"
+mteb = "1.1.1"
+hruid = "0.0.3"
+
+[tool.poetry.group.examples]
+optional = true
+
+[tool.poetry.group.examples.dependencies]
+flagembedding = "1.0.6"

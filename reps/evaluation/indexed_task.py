@@ -1,6 +1,6 @@
 import logging
 from time import time
-from mteb.abstasks import DRESModel
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -9,13 +9,13 @@ DOC_PROCESSING_KEY = "doc_processor"
 QUERY_PROCESSING_KEY = "query_processor"
 
 class IndexedTask:
-
+    """
+    IndexedTask is a stubbed MTEB task. It enables us to directly use vector indexes while evaluating in MTEB.
+    """
     def evaluate(
             self,
             model,
             split="test",
-            batch_size=128,
-            corpus_chunk_size=None,
             score_function="cos_sim",
             **kwargs
     ):
@@ -28,7 +28,11 @@ class IndexedTask:
             self.load_data()
 
         corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
-        model = model if self.is_dres_compatible(model) else DRESModel(model)
+        # this is an artifact out of BEIR. https://github.com/beir-cellar/beir/blob/main/beir/retrieval/search/dense/faiss_search.py#L68
+        # we run this here so that we don't make this assumption in our retriever, which could change.
+        corpus_ids = sorted(corpus, key=lambda k: len(corpus[k].get("title", "") + corpus[k].get("text", "")), reverse=True)
+        corpus = {cid:{"doc_id": cid, **corpus[cid]} for cid in corpus_ids}
+
 
         retriever = EvaluateRetrieval(model, score_function=score_function)  # or "cos_sim" or "dot"
         start_time = time()
