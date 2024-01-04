@@ -42,7 +42,7 @@ A document processor encapsulates the logic to translate from raw data to our de
 ```python
 class DocumentProcessor(ProcessingPipeline[Dict[str, str], QdrantDocument]):
     def __init__(self, model, name='', version=''):
-        super().__init__()
+        super().__init__(name, version)
         self.model = model
 
     def process(self, batch: List[Dict[str, str]], batch_size: int=0, **kwargs) -> List[QdrantDocument]:
@@ -72,7 +72,7 @@ For dense retrieval, we return embeddings from a model.
 ```python
 class QueryProcessor(ProcessingPipeline[str, List[float]]):
     def __init__(self, model, name = '', version = ''):
-        super().__init__()
+        super().__init__(name, version)
         self.model = model
 
     def process(self, batch: List[str], batch_size: int=0, **kwargs) -> List[List[float]]:
@@ -171,41 +171,24 @@ retri-eval is still in active development. We're planning to add the following f
 - [ ] Add support for latency and cost benchmarks
 
 # What dataset to evaluate on
-Building your own internal evaluation dataset is going to be the highest signal while
-also being the most time consuming. Relying on multiple MTEB datasets
-can tell you how your solution works generally.
-
 retri-eval is currently integrated into MTEB for retrieval tasks only, but we're working on more.
 
 [MTEB's available tasks](https://github.com/embeddings-benchmark/mteb/tree/main?tab=readme-ov-file#available-tasks)
+
+We also recommend building your own internal dataset, but this can be time consuming and potentially
+error prone. We'd love to chat if you're working on this.
+
+## License
+Distributed under the AGPL-3 License. If you need an alternate license, please reach out.
 
 
 # Let's Chat!
 Reach out! Our team has experience working on petabyte-scale search and analytics applications.
 We'd love to hear what you're working on and see how we can help.
 
-Matt - matt _[at]_ deployql.com
+Matt - matt _[at]_ deployql.com - [Or Schedule some time to chat on my calendar](https://calendar.app.google/obJmewkwVSuUcSK1A)
 
-Feel free to schedule some time to chat, too.
 
-<!-- Google Calendar Appointment Scheduling begin -->
-<link href="https://calendar.google.com/calendar/scheduling-button-script.css" rel="stylesheet">
-<script src="https://calendar.google.com/calendar/scheduling-button-script.js" async>
-</script>
-<script>
-(function() {
-  var target = document.currentScript;
-  window.addEventListener('load', function() {
-    calendar.schedulingButton.load({
-      url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ0JWQN_h7eFEwVE6DL8E8lMBQPn2k6YAmnZJ9QhGlD-Dn__lxUDZa4zq4zjuZoRNJE8kjhCAhA5?gv=true',
-      color: '#039BE5',
-      label: 'Book an appointment',
-      target,
-    });
-  });
-})();
-</script>
-<!-- end Google Calendar Appointment Scheduling -->
 
 ## Acknowledgements
 - [MTEB](https://github.com/embeddings-benchmark/mteb)

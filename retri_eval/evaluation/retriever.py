@@ -85,7 +85,7 @@ class DenseRetriever(BaseSearch):
                 logger.info("Encoding Batch {}/{}...".format(batch_num+1, len(itr)))
                 corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(corpus_list))
 
-                embeddings = self.encode_corpus(corpus_list[corpus_start_idx:corpus_end_idx], batch_size=0)
+                embeddings = self.encode_corpus(corpus_list[corpus_start_idx:corpus_end_idx], batch_size=50000)
                 self.index.add(embeddings)
         else:
             logger.info("Skipping indexing. Given Index is not empty.")

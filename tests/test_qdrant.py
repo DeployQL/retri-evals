@@ -1,22 +1,23 @@
-import unittest
+import pytest
 import uuid
 
 from retri_eval.indexes.qdrant_index import QdrantIndex, QdrantDocument
+from qdrant_client.models import VectorParams, Distance
 
 
-
-class TestQdrant(unittest.TestCase):
+class TestQdrant():
     def test_index(self):
-        index = QdrantIndex("test", path=None, size=3)
-        self.assertIsNotNone(index)
+        index = QdrantIndex("test", vector_config=VectorParams(size=3, distance=Distance.COSINE))
+        assert index is not None, "failed to create qdrant index"
 
     def test_index_writes(self):
-        index = QdrantIndex("test", path=None, size=3)
+        index = QdrantIndex("test", vector_config=VectorParams(size=3, distance=Distance.COSINE))
         index.add(QdrantDocument(
             id=uuid.uuid4().hex,
+            doc_id="123",
             text="some test text",
             embedding=[0.1, 1., 2.]
         ))
         out = index.search(vector=[0.1,1.,2.], limit=2)
-        self.assertEqual(1, len(out))
+        assert len(out) == 1, "failed to search data in the index."
 

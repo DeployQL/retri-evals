@@ -15,7 +15,7 @@ from mteb import MTEB
 
 class DocumentProcessor(ProcessingPipeline[Dict[str, str], QdrantDocument]):
     def __init__(self, model, name='', version=''):
-        super().__init__()
+        super().__init__(name, version)
         self.model = model
 
     def process(self, batch: List[Dict[str, str]], batch_size: int=0, **kwargs) -> List[QdrantDocument]:
@@ -45,18 +45,24 @@ class DocumentProcessor(ProcessingPipeline[Dict[str, str], QdrantDocument]):
 
 class QueryProcessor(ProcessingPipeline[str, List[float]]):
     def __init__(self, model, name = '', version = ''):
-        super().__init__()
+        super().__init__(name, version)
         self.model = model
 
     def process(self, batch: List[str], batch_size: int=0, **kwargs) -> List[List[float]]:
         return self.model.encode_queries(batch)
 
+class TolerantModel:
+    def __init__(self, model):
+        self.model = model
+
+    def encode(self, batch, **kwargs):
+        return self.model.encode(batch)
 
 if __name__ == "__main__":
     model_name ="BAAI/bge-small-en-v1.5"
     model = FlagModel(model_name,
                       query_instruction_for_retrieval="Represent this sentence for searching relevant passages: ",
-                      use_fp16=True)
+                      use_fp16=False)
 
     index = QdrantIndex("Touche", vector_config=VectorParams(size=384, distance=Distance.COSINE))
     doc_processor = DocumentProcessor(model, name=model_name)
@@ -74,6 +80,7 @@ if __name__ == "__main__":
     eval = MTEB(tasks=[Touche2020()], task_langs=['en'])
 
     results = eval.run(retriever, verbosity=2, overwrite_results=True, output_folder=f"results/{id}", eval_splits=['test'])
+
 
 
     print(json.dumps(results, indent=1))

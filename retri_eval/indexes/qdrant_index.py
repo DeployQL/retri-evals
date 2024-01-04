@@ -46,7 +46,7 @@ class QdrantIndex(Index[QdrantDocument]):
                 ))
             self.index.upsert(
                 collection_name=self.name,
-                wait=False,
+                wait=True,
                 points=points,
             )
         else:

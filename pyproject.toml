@@ -3,9 +3,9 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "retri_eval"
+name = "retri-evals"
 version = "0.0.1"
-
+homepage = "https://github.com/DeployQL/retri-evals"
 description = "Open-source tool for building and evaluating retrieval pipelines."
 readme = "README.md"
 license = "AGPL-3.0"
@@ -17,7 +17,12 @@ keywords = [
     "rag",
     "retrieval",
 ]
-authors = [ "DeployQL <contact@deployql.com" ]
+authors = [
+    "Matt Barta <contact@deployql.com>"
+]
+packages = [
+    {include = "retri_eval"},
+]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.12"
@@ -34,3 +39,6 @@ optional = true
 
 [tool.poetry.group.examples.dependencies]
 flagembedding = "1.0.6"
+[tool.poetry.group.test.dependencies]
+pytest = "^7.4.4"
+
