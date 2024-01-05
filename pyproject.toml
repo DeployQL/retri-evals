@@ -42,3 +42,7 @@ flagembedding = "1.0.6"
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.4"
 
+
+[tool.poetry.group.dev-dependencies.dependencies]
+black = "^23.12.1"
+

@@ -15,6 +15,7 @@ from mteb import AbsTaskRetrieval
 
 CLASS_PREFIX = "MTEB"
 
+
 def main():
     print("creating mteb tasks.")
     path = "retri_eval/evaluation/mteb_tasks.py"
@@ -42,10 +43,11 @@ def main():
 
     output = import_statement + output
     # add line breaks to all output.
-    output = [x+"\n" for x in output]
+    output = [x + "\n" for x in output]
 
     with open(path, "w+") as f:
         f.writelines(output)
+
 
 if __name__ == "__main__":
     main()

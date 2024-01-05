@@ -49,187 +49,232 @@ from mteb import (
 )
 from retri_eval.evaluation.indexed_task import IndexedTask
 
-class ArguAna(IndexedTask,MTEBArguAna):
+
+class ArguAna(IndexedTask, MTEBArguAna):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class ClimateFEVER(IndexedTask,MTEBClimateFEVER):
+
+class ClimateFEVER(IndexedTask, MTEBClimateFEVER):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class CQADupstackAndroidRetrieval(IndexedTask,MTEBCQADupstackAndroidRetrieval):
+
+class CQADupstackAndroidRetrieval(IndexedTask, MTEBCQADupstackAndroidRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class CQADupstackEnglishRetrieval(IndexedTask,MTEBCQADupstackEnglishRetrieval):
+
+class CQADupstackEnglishRetrieval(IndexedTask, MTEBCQADupstackEnglishRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class CQADupstackGamingRetrieval(IndexedTask,MTEBCQADupstackGamingRetrieval):
+
+class CQADupstackGamingRetrieval(IndexedTask, MTEBCQADupstackGamingRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class CQADupstackGisRetrieval(IndexedTask,MTEBCQADupstackGisRetrieval):
+
+class CQADupstackGisRetrieval(IndexedTask, MTEBCQADupstackGisRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class CQADupstackMathematicaRetrieval(IndexedTask,MTEBCQADupstackMathematicaRetrieval):
+
+class CQADupstackMathematicaRetrieval(IndexedTask, MTEBCQADupstackMathematicaRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class CQADupstackPhysicsRetrieval(IndexedTask,MTEBCQADupstackPhysicsRetrieval):
+
+class CQADupstackPhysicsRetrieval(IndexedTask, MTEBCQADupstackPhysicsRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class CQADupstackProgrammersRetrieval(IndexedTask,MTEBCQADupstackProgrammersRetrieval):
+
+class CQADupstackProgrammersRetrieval(IndexedTask, MTEBCQADupstackProgrammersRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class CQADupstackStatsRetrieval(IndexedTask,MTEBCQADupstackStatsRetrieval):
+
+class CQADupstackStatsRetrieval(IndexedTask, MTEBCQADupstackStatsRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class CQADupstackTexRetrieval(IndexedTask,MTEBCQADupstackTexRetrieval):
+
+class CQADupstackTexRetrieval(IndexedTask, MTEBCQADupstackTexRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class CQADupstackUnixRetrieval(IndexedTask,MTEBCQADupstackUnixRetrieval):
+
+class CQADupstackUnixRetrieval(IndexedTask, MTEBCQADupstackUnixRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class CQADupstackWebmastersRetrieval(IndexedTask,MTEBCQADupstackWebmastersRetrieval):
+
+class CQADupstackWebmastersRetrieval(IndexedTask, MTEBCQADupstackWebmastersRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class CQADupstackWordpressRetrieval(IndexedTask,MTEBCQADupstackWordpressRetrieval):
+
+class CQADupstackWordpressRetrieval(IndexedTask, MTEBCQADupstackWordpressRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class DBPedia(IndexedTask,MTEBDBPedia):
+
+class DBPedia(IndexedTask, MTEBDBPedia):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class FEVER(IndexedTask,MTEBFEVER):
+
+class FEVER(IndexedTask, MTEBFEVER):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class FiQA2018(IndexedTask,MTEBFiQA2018):
+
+class FiQA2018(IndexedTask, MTEBFiQA2018):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class HotpotQA(IndexedTask,MTEBHotpotQA):
+
+class HotpotQA(IndexedTask, MTEBHotpotQA):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class MSMARCO(IndexedTask,MTEBMSMARCO):
+
+class MSMARCO(IndexedTask, MTEBMSMARCO):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class MSMARCOv2(IndexedTask,MTEBMSMARCOv2):
+
+class MSMARCOv2(IndexedTask, MTEBMSMARCOv2):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class NFCorpus(IndexedTask,MTEBNFCorpus):
+
+class NFCorpus(IndexedTask, MTEBNFCorpus):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class NQ(IndexedTask,MTEBNQ):
+
+class NQ(IndexedTask, MTEBNQ):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class QuoraRetrieval(IndexedTask,MTEBQuoraRetrieval):
+
+class QuoraRetrieval(IndexedTask, MTEBQuoraRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class SCIDOCS(IndexedTask,MTEBSCIDOCS):
+
+class SCIDOCS(IndexedTask, MTEBSCIDOCS):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class SciFact(IndexedTask,MTEBSciFact):
+
+class SciFact(IndexedTask, MTEBSciFact):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class Touche2020(IndexedTask,MTEBTouche2020):
+
+class Touche2020(IndexedTask, MTEBTouche2020):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class TRECCOVID(IndexedTask,MTEBTRECCOVID):
+
+class TRECCOVID(IndexedTask, MTEBTRECCOVID):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class T2Retrieval(IndexedTask,MTEBT2Retrieval):
+
+class T2Retrieval(IndexedTask, MTEBT2Retrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class MMarcoRetrieval(IndexedTask,MTEBMMarcoRetrieval):
+
+class MMarcoRetrieval(IndexedTask, MTEBMMarcoRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class DuRetrieval(IndexedTask,MTEBDuRetrieval):
+
+class DuRetrieval(IndexedTask, MTEBDuRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class CovidRetrieval(IndexedTask,MTEBCovidRetrieval):
+
+class CovidRetrieval(IndexedTask, MTEBCovidRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class CmedqaRetrieval(IndexedTask,MTEBCmedqaRetrieval):
+
+class CmedqaRetrieval(IndexedTask, MTEBCmedqaRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class EcomRetrieval(IndexedTask,MTEBEcomRetrieval):
+
+class EcomRetrieval(IndexedTask, MTEBEcomRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class MedicalRetrieval(IndexedTask,MTEBMedicalRetrieval):
+
+class MedicalRetrieval(IndexedTask, MTEBMedicalRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class VideoRetrieval(IndexedTask,MTEBVideoRetrieval):
+
+class VideoRetrieval(IndexedTask, MTEBVideoRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class ArguAnaPL(IndexedTask,MTEBArguAnaPL):
+
+class ArguAnaPL(IndexedTask, MTEBArguAnaPL):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class DBPediaPL(IndexedTask,MTEBDBPediaPL):
+
+class DBPediaPL(IndexedTask, MTEBDBPediaPL):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class FiQAPLRetrieval(IndexedTask,MTEBFiQAPLRetrieval):
+
+class FiQAPLRetrieval(IndexedTask, MTEBFiQAPLRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class HotpotQAPL(IndexedTask,MTEBHotpotQAPL):
+
+class HotpotQAPL(IndexedTask, MTEBHotpotQAPL):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class MSMARCOPL(IndexedTask,MTEBMSMARCOPL):
+
+class MSMARCOPL(IndexedTask, MTEBMSMARCOPL):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class NFCorpusPL(IndexedTask,MTEBNFCorpusPL):
+
+class NFCorpusPL(IndexedTask, MTEBNFCorpusPL):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class NQPL(IndexedTask,MTEBNQPL):
+
+class NQPL(IndexedTask, MTEBNQPL):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class QuoraPLRetrieval(IndexedTask,MTEBQuoraPLRetrieval):
+
+class QuoraPLRetrieval(IndexedTask, MTEBQuoraPLRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class SCIDOCSPL(IndexedTask,MTEBSCIDOCSPL):
+
+class SCIDOCSPL(IndexedTask, MTEBSCIDOCSPL):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class SciFactPL(IndexedTask,MTEBSciFactPL):
+
+class SciFactPL(IndexedTask, MTEBSciFactPL):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-class TRECCOVIDPL(IndexedTask,MTEBTRECCOVIDPL):
+
+class TRECCOVIDPL(IndexedTask, MTEBTRECCOVIDPL):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-

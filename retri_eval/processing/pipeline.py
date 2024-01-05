@@ -6,15 +6,23 @@ import torch
 Input = TypeVar("Input")
 Output = TypeVar("Output")
 
-generator = hruid.Generator(use_number=False, use_adjective=False, use_noun=True, use_verb=False, use_adverb=False)
+generator = hruid.Generator(
+    use_number=False,
+    use_adjective=False,
+    use_noun=True,
+    use_verb=False,
+    use_adverb=False,
+)
 
 
 class EmbeddedOutput:
     """
     EmbeddedOutput is a standard output for document embeddings.
     """
+
     id: str
     embedding: torch.Tensor
+
 
 class ProcessingPipeline(ABC, Generic[Input, Output]):
     """
@@ -22,9 +30,10 @@ class ProcessingPipeline(ABC, Generic[Input, Output]):
 
     This abstraction is used to encapsulate the id behavior of the pipelines.
     """
-    def __init__(self, name: str='', version:str=''):
+
+    def __init__(self, name: str = "", version: str = ""):
         self.name = name if name else generator.random()
-        self.version = version if version else 'v0.0'
+        self.version = version if version else "v0.0"
 
     @property
     def id(self) -> str:
@@ -35,7 +44,9 @@ class ProcessingPipeline(ABC, Generic[Input, Output]):
         return f"{self.name}:{self.version}"
 
     @abstractmethod
-    def process(self, batch: List[Input], batch_size: int=0, **kwargs) -> List[Output]:
+    def process(
+        self, batch: List[Input], batch_size: int = 0, **kwargs
+    ) -> List[Output]:
         """
 
         :param batch: a list of strings. Strings could be urls, file paths, or raw text.
@@ -43,4 +54,3 @@ class ProcessingPipeline(ABC, Generic[Input, Output]):
         :return: List[tensor]
         """
         pass
-
