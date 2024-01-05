@@ -2,7 +2,7 @@
 ### RAG evaluation framework for faster iteration
 
 
-## About retri-eval
+## About retri-evals
 Evaluating all of the components of a RAG pipeline is challenging. We didn't find a
 great existing solution that was
 1. flexible enough to fit on top of our document and query processing.
@@ -19,7 +19,7 @@ retri-eval aims to be unopinionated enough that you can reuse any existing pipel
 ## Getting Started
 ### Installation
 ```bash
-pip install retri-eval
+pip install retri-evals
 ```
 ### Define your data type
 We use Pydantic to make sure that the index receives the expected data.
