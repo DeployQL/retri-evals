@@ -25,7 +25,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.12"
+python = ">=3.9,<3.12"
 pydantic-settings = "2.1.0"
 tantivy = "0.21.0"
 qdrant-client = "1.7.0"
@@ -33,6 +33,7 @@ tokenizers = "0.14.1"
 beir = "2.0.0"
 mteb = "1.1.1"
 hruid = "0.0.3"
+dspy-ai = "^2.1.1"
 
 [tool.poetry.group.examples]
 optional = true

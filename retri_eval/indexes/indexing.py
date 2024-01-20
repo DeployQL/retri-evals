@@ -28,6 +28,7 @@ class SearchResponse(BaseModel):
     id: str
     doc_id: str
     score: float
+    text: str
 
 
 class Index(ABC, Generic[T]):

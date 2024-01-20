@@ -33,6 +33,7 @@ class ProcessingPipeline(ABC, Generic[Input, Output]):
 
     def __init__(self, name: str = "", version: str = ""):
         self.name = name if name else generator.random()
+        self.name = name.replace("/", "-")
         self.version = version if version else "v0.0"
 
     @property
