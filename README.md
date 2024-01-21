@@ -1,15 +1,13 @@
 # Retrieval Evaluation Pipelines <sup>alpha</sup>
-### RAG evaluation framework for faster iteration
+### RAG Bootstrapping Framework
 
 
 ## About retri-evals
-Evaluating all of the components of a RAG pipeline is challenging. We didn't find a
-great existing solution that was
-1. flexible enough to fit on top of our document and query processing.
-2. gave us confidence in scaling the database up without increasing latency or costs.
-3. encouraged reuse of components.
+Retri-evals focuses on bootstrapping and evaluating retrieval pipelines.
 
-retri-eval aims to be unopinionated enough that you can reuse any existing pipelines you have.
+We want to make it easy to create a dataset and compare different chunking and embedding options.
+Our goal is to be complimentary to your existing pipelines! 
+
 
 ## Built With
 - MTEB
@@ -169,6 +167,19 @@ retri-eval is still in active development. We're planning to add the following f
 - [ ] Support for automatic dataset generation
 - [ ] Support parallel execution
 - [ ] Add support for latency and cost benchmarks
+
+
+## Comparison Table
+
+| Feature/Aspect       | Retri-evals                                 | Ragas                            | Llamachain                              |
+| --------------------- | ------------------------------------------- | -------------------------------- | ---------------------------------------- |
+| **Evaluation Options**| NDCG, MRR, Recall              | Context Precision, Faithfulness, Answer Relevancy        | -            |
+| **Data Bootstrapping** | Optimizes against your index, use any LLM                         | Generates a diverse set of queries using llm-as-a-judge filtering (OpenAI models only)| -   |
+| **Index Structure**    | Bring your own index         | Datasets only   | Many Integrations      |
+| **Compatibility**      | Complimentary to existing pipelines           | Ragas compatibility details      | Llamachain compatibility details        |
+| **Documentation**      | here!           | [docs](https://docs.ragas.io/en/stable/)      | [docs](https://python.langchain.com/docs/get_started/introduction)        |
+| **Usage Examples**     | [examples](https://github.com/DeployQL/retri-evals/tree/main/examples)                     | [how-to guides](https://docs.ragas.io/en/stable/howtos/index.html#how-to-guides)            | [quickstart](https://python.langchain.com/docs/get_started/quickstart)               |
+
 
 # What dataset to evaluate on
 retri-eval is currently integrated into MTEB for retrieval tasks only, but we're working on more.
