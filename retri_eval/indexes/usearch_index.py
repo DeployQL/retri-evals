@@ -22,14 +22,13 @@ class USearchDocument(BaseModel):
 
 class USearchIndex(Index[USearchDocument]):
     def __init__(
-            self,
-            name: str,
-            location: Optional[str] = ":memory:",
-            embedding_key: str = "embedding",
-            id_key: str = "id",
-            dims: int = 384,
-            multi=False,
-            read_only=False,
+        self,
+        name: str,
+        embedding_key: str = "embedding",
+        id_key: str = "id",
+        dims: int = 384,
+        multi=False,
+        read_only=False,
     ):
         self.name = name
 
@@ -37,18 +36,17 @@ class USearchIndex(Index[USearchDocument]):
             os.makedirs(f"{name}", exist_ok=True)
             self.index = USIndex(
                 ndim=dims,
-                dtype='f16',
-                multi=False,
+                dtype="f16",
+                multi=multi,
             )
 
         # self.index = self._index.view(f"{name}/index")
         else:
             self.index = USIndex.restore(f"{name}/index", view=read_only)
 
-
-        self.text = dbm.open(f"{name}/text", 'c')
+        self.text = dbm.open(f"{name}/text", "c")
         # usearch requires int keys. we map between any given id to an int.
-        self.keys = dbm.open(f"{name}/keys", 'c')
+        self.keys = dbm.open(f"{name}/keys", "c")
         self.id_allocated = len(self.keys)
 
         self.embedding_key = embedding_key
@@ -83,17 +81,21 @@ class USearchIndex(Index[USearchDocument]):
             self.id_allocated += 1
 
     def search(
-            self,
-            vector: List[float],
-            limit: Optional[int] = 0,
-            fields: Optional[List[str]] = None,
+        self,
+        vector: np.ndarray,
+        limit: Optional[int] = 0,
+        fields: Optional[List[str]] = None,
     ) -> List[SearchResponse]:
-        results = self.index.search(vector, limit if limit else 100
-        )
+        results = self.index.search(vector, limit if limit else 100)
         print([x.key for x in results])
-        print([self.text.get(str(x.key), '') for x in results])
+        print([self.text.get(str(x.key), "") for x in results])
         return [
-            SearchResponse(id=str(r.key), doc_id=str(self.keys[str(r.key)]), score=r.distance, text=self.text.get(str(r.key), ''))
+            SearchResponse(
+                id=str(r.key),
+                doc_id=str(self.keys[str(r.key)]),
+                score=r.distance,
+                text=self.text.get(str(r.key), ""),
+            )
             for r in results
         ]
 
@@ -102,5 +104,10 @@ class USearchIndex(Index[USearchDocument]):
 
     def save(self):
         self.index.save(f"{self.name}/index")
-        self.text.sync()
-        self.keys.sync()
+        try:
+            self.text.sync()
+            self.keys.sync()
+        except:
+            # sync can throw if the underlying dbm doesn't have the sync method.
+            # I'm not clear on why the interface is different.
+            pass

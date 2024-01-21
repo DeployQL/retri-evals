@@ -4,6 +4,7 @@ Retriever is a wrapper for BEIR and MTEB to evaluate against our indexes.
 Retrievers conform to the expected Model interface, so they can be passed to MTEB as models. But they also
 provide a search() method that we use in our task to run the evaluation.
 """
+import numpy as np
 from beir.retrieval.search import BaseSearch
 from typing import Dict, List, Tuple, NamedTuple
 from retri_eval.indexes.indexing import Index, SearchResponse
@@ -31,7 +32,7 @@ class DenseRetriever(BaseSearch):
     def __init__(
         self,
         index: Index,
-        query_processor: ProcessingPipeline[str, List[float]],
+        query_processor: ProcessingPipeline[str, np.ndarray],
         doc_processor: ProcessingPipeline[Dict[str, str], Output],
         corpus_chunk_size: int = 250,
         queries_batch_size: int = 50,

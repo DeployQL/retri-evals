@@ -25,25 +25,37 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.12"
+python = ">=3.10,<3.12"
 pydantic-settings = "2.1.0"
 tantivy = "0.21.0"
 qdrant-client = "1.7.0"
-tokenizers = "0.14.1"
+tokenizers = "^0.15.0"
 beir = "2.0.0"
 mteb = "1.1.1"
 hruid = "0.0.3"
 dspy-ai = "^2.1.1"
+ir-datasets = "^0.5.5"
+ipython = "^8.20.0"
+llama-cpp-python = "^0.2.31"
+autoawq = "^0.1.8"
+transformers = "^4.36.2"
+sentence-transformers = "^2.2.2"
+usearch = "^2.8.15"
 
 [tool.poetry.group.examples]
 optional = true
 
 [tool.poetry.group.examples.dependencies]
-flagembedding = "1.0.6"
+
+
 [tool.poetry.group.test.dependencies]
 pytest = "^7.4.4"
 
 
 [tool.poetry.group.dev-dependencies.dependencies]
 black = "^23.12.1"
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "default"
 

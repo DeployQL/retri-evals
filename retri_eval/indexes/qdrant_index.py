@@ -1,10 +1,9 @@
 from retri_eval.indexes.indexing import Index, SearchResponse
-from typing import Any, get_type_hints, Generic, TypeVar, Optional, List, Mapping
+from typing import  TypeVar, Optional, List, Mapping
 from pydantic import BaseModel, ConfigDict
 from qdrant_client import QdrantClient
-from qdrant_client.http.models import Distance, VectorParams
+from qdrant_client.http.models import VectorParams
 from qdrant_client.http.models import PointStruct
-import numpy as np
 from retri_eval.indexes.numpy_type import NdArray
 
 T = TypeVar("T")
@@ -17,6 +16,7 @@ class QdrantDocument(BaseModel):
     text: str
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
+
 
 class QdrantIndex(Index[QdrantDocument]):
     def __init__(
@@ -82,7 +82,12 @@ class QdrantIndex(Index[QdrantDocument]):
         )
 
         return [
-            SearchResponse(id=r.id, doc_id=r.payload["doc_id"], score=r.score, text=r.payload['text'])
+            SearchResponse(
+                id=r.id,
+                doc_id=r.payload["doc_id"],
+                score=r.score,
+                text=r.payload["text"],
+            )
             for r in results
         ]
 
