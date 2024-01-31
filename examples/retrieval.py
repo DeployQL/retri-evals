@@ -1,82 +1,36 @@
-import uuid
-from typing import List, Dict
 import json
+
+from sentence_transformers import SentenceTransformer
+
 from retri_eval.evaluation.mteb_tasks import CQADupstackEnglishRetrieval, Touche2020
 from retri_eval.evaluation.retriever import DenseRetriever
 from retri_eval.indexes.qdrant_index import QdrantIndex, QdrantDocument
-from retri_eval.indexes.indexing import MTEBDocument
-from retri_eval.processing.pipeline import ProcessingPipeline, Input, Output
-from FlagEmbedding import FlagModel
+from retri_eval.processing.basic_query_processor import QueryProcessor
+from retri_eval.processing.beir_title_processor import BeirTitleProcessor
 from qdrant_client.models import VectorParams, Distance
 from mteb import MTEB
 
 
-class DocumentProcessor(ProcessingPipeline[Dict[str, str], QdrantDocument]):
-    def __init__(self, model, name="", version=""):
-        super().__init__(name, version)
-        self.model = model
 
-    def process(
-        self, batch: List[Dict[str, str]], batch_size: int = 0, **kwargs
-    ) -> List[QdrantDocument]:
-        """
-        Takes a string of a document and returns a document for the index..
-        :param batch:
-        :param kwargs:
-        :return:
-        """
-        # stubbed for demonstration purposes
-        chunker = lambda x: [x]
-
-        results = []
-        for x in batch:
-            doc = MTEBDocument(**x)
-
-            chunks = chunker(doc.text)
-            embedding = self.model.encode(chunks)
-            for i, chunk in enumerate(chunks):
-                results.append(
-                    QdrantDocument(
-                        id=uuid.uuid4().hex,  # qdrant requires a uuid.
-                        doc_id=doc.doc_id,
-                        text=chunk,
-                        embedding=embedding[i],
-                    )
-                )
-        return results
-
-
-class QueryProcessor(ProcessingPipeline[str, List[float]]):
-    def __init__(self, model, name="", version=""):
-        super().__init__(name, version)
-        self.model = model
-
-    def process(
-        self, batch: List[str], batch_size: int = 0, **kwargs
-    ) -> List[List[float]]:
-        return self.model.encode_queries(batch)
-
-
-class TolerantModel:
+class HFModel:
     def __init__(self, model):
         self.model = model
 
     def encode(self, batch, **kwargs):
         return self.model.encode(batch)
 
+    def encode_queries(self, batch, **kwargs):
+        return self.model.encode([f"Represent this sentence for searching relevant passages: {query}" for query in batch])
+
 
 if __name__ == "__main__":
     model_name = "BAAI/bge-small-en-v1.5"
-    model = FlagModel(
-        model_name,
-        query_instruction_for_retrieval="Represent this sentence for searching relevant passages: ",
-        use_fp16=False,
-    )
+    model = SentenceTransformer(model_name)
 
     index = QdrantIndex(
         "Touche", vector_config=VectorParams(size=384, distance=Distance.COSINE)
     )
-    doc_processor = DocumentProcessor(model, name=model_name)
+    doc_processor = BeirTitleProcessor(model, name=model_name)
     query_processor = QueryProcessor(model, name=model_name)
 
     retriever = DenseRetriever(

@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import List, Generic, TypeVar, Optional, Dict
 from typing import TypedDict
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
+from retri_eval.indexes.numpy_type import NdArray
+
 
 T = TypeVar("T")
 K = TypeVar("K")
@@ -28,6 +30,20 @@ class SearchResponse(BaseModel):
     id: str
     doc_id: str
     score: float
+    text: str
+
+
+class IndexingDocument(BaseModel):
+    """
+    IndexingDocument is a Generic document model that takes in the base fields each index should expect to handle.
+    """
+
+    id: str
+    doc_id: str
+    embedding: NdArray
+    text: str
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
 
 class Index(ABC, Generic[T]):
@@ -53,4 +69,8 @@ class Index(ABC, Generic[T]):
 
     @abstractmethod
     def count(self) -> int:
+        pass
+
+    @abstractmethod
+    def save(self):
         pass

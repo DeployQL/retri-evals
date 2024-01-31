@@ -1,4 +1,4 @@
-import pytest
+import numpy as np
 import uuid
 
 from retri_eval.indexes.qdrant_index import QdrantIndex, QdrantDocument
@@ -21,7 +21,7 @@ class TestQdrant:
                 id=uuid.uuid4().hex,
                 doc_id="123",
                 text="some test text",
-                embedding=[0.1, 1.0, 2.0],
+                embedding=np.asarray([0.1, 1.0, 2.0]),
             )
         )
         out = index.search(vector=[0.1, 1.0, 2.0], limit=2)
