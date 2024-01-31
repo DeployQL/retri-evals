@@ -87,8 +87,7 @@ class USearchIndex(Index[USearchDocument]):
         fields: Optional[List[str]] = None,
     ) -> List[SearchResponse]:
         results = self.index.search(vector, limit if limit else 100)
-        print([x.key for x in results])
-        print([self.text.get(str(x.key), "") for x in results])
+
         return [
             SearchResponse(
                 id=str(r.key),

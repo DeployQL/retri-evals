@@ -41,6 +41,7 @@ autoawq = "^0.1.8"
 transformers = "^4.36.2"
 sentence-transformers = "^2.2.2"
 usearch = "^2.8.15"
+openai = "<=0.28.1"
 
 [tool.poetry.group.examples]
 optional = true

@@ -1,5 +1,6 @@
 from llama_cpp import Llama
 from dsp.modules.lm import LM
+import requests
 
 # from awq import AutoAWQForCausalLM
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -39,3 +40,34 @@ class DefaultLM(LM):
 
     def __call__(self, prompt, only_completed=True, return_sorted=False, **kwargs):
         return self.llm(prompt)[0]["generated_text"]
+
+
+class LLMServer(LM):
+    def __init__(self, name="server", url="http://192.168.0.17:8888/completion"):
+        super().__init__(model=name)
+        self.url = url
+        self.model = name
+
+    def basic_request(self, prompt: str, **kwargs):
+        # resp = requests.post(self.url, json={
+        #     "prompt": prompt,
+        #     "n_predict": kwargs.get("n_predict", 128)
+        # })
+        # return resp.json()['content']
+        resp = requests.post(
+            self.url,
+            json={
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": prompt,
+                    }
+                ],
+                "model": self.model,
+                "n_predict": kwargs.get("n_predict", 256),
+            },
+        )
+        return [resp.json()["choices"][0]["message"]["content"]]
+
+    def __call__(self, prompt, only_completed=True, return_sorted=False, **kwargs):
+        return self.basic_request(prompt, **kwargs)

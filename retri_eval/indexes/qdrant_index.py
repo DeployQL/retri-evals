@@ -1,5 +1,5 @@
 from retri_eval.indexes.indexing import Index, SearchResponse
-from typing import  TypeVar, Optional, List, Mapping
+from typing import TypeVar, Optional, List, Mapping
 from pydantic import BaseModel, ConfigDict
 from qdrant_client import QdrantClient
 from qdrant_client.http.models import VectorParams

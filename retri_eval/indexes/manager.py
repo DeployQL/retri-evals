@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import List, NamedTuple
+from typing import List, NamedTuple, Iterable
 from itertools import islice
 
 from tqdm import tqdm
@@ -27,8 +27,8 @@ class IndexManager:
     def __init__(self, indexes_and_processors: List[IndexAndProcessor]):
         self.indexes = indexes_and_processors
 
-    def process_dataset(self, dataset: Dataset, batch_size=100):
-        for b in tqdm(batch(dataset.docs_iter(), batch_size)):
+    def process_dataset(self, dataset: Iterable, batch_size=100):
+        for b in tqdm(batch(dataset, batch_size)):
             for index_and_processor in self.indexes:
                 index = index_and_processor.index
                 doc_processor = index_and_processor.processor
